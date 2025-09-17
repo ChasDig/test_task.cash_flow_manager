@@ -5,4 +5,5 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cash_manager.apps.CashManagerConfig', # CashManager
 ]
