@@ -1,0 +1,34 @@
+# Папки и файлы IDE
+.idea/
+*.swp
+*.swo
+
+# Виртуальное окружение
+venv/
+.env/
+env/
+ENV/
+.env
+.env.local
+.env.*.local
+secrets.ini
+
+# Кэш и скомпилированные файлы Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Пакеты и зависимости
+*.egg-info/
+*.egg
+
+# Логи и временные файлы
+*.log
+*.pot
+
+# PyCharm
+.idea/
+*.iml
+
+# VS Code
+.vscode/
