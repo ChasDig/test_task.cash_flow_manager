@@ -18,21 +18,22 @@ ALLOWED_HOSTS = os.environ.get(
 ROOT_URLCONF = 'service_cash_manager.urls'
 WSGI_APPLICATION = 'service_cash_manager.wsgi.application'
 
-
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# Static
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-
+# Media
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 # Components configs
 include(
