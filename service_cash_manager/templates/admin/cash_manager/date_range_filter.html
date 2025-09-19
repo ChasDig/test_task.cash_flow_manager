@@ -1,0 +1,30 @@
+{% load i18n %}
+<div class="admin-filter">
+    <h3>{{ spec.title }}</h3>
+
+    <form method="get">
+        <div style="margin-bottom: 10px;">
+            <label for="start_time">С:</label>
+            <input type="date" id="start_time" name="start_time"
+                   value="{{ request.GET.start_time|default:'' }}">
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <label for="end_time">По:</label>
+            <input type="date" id="end_time" name="end_time"
+                   value="{{ request.GET.end_time|default:'' }}">
+        </div>
+
+        <div>
+            <button type="submit" class="button">{% trans "Применить" %}</button>
+            <a href="{{ request.path }}" class="button">{% trans "Сбросить" %}</a>
+        </div>
+
+        {# Сохраняем остальные GET-параметры #}
+        {% for key, value in request.GET.items %}
+            {% if key != 'start_time' and key != 'end_time' %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endif %}
+        {% endfor %}
+    </form>
+</div>

@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.db import models
+from django.core.validators import MinValueValidator
 
 
 class UUIDMixin(models.Model):
@@ -12,12 +13,14 @@ class UUIDMixin(models.Model):
         abstract = True
 
 
-class DatetimeStampedMixin(models.Model):
+class DateStampedMixin(models.Model):
+    """Mixin - Даты по работе с сущностями."""
 
-    created_at = models.DateTimeField(
+    created_at = models.DateField(
         auto_now_add=True,
-        help_text="Время создания сущности",
+        help_text="Дата создания сущности",
     )
+
 
     class Meta:
         abstract = True
@@ -172,10 +175,10 @@ class CashFlowStatus(UUIDMixin):
         verbose_name_plural = "Статусы ДДС"
 
     def __str__(self) -> str:
-        return f"StatusTitle={self.title}(Alias={self.alias})"
+        return f"Статус '{self.title}'('{self.alias}')"
 
 
-class CashFlow(UUIDMixin, DatetimeStampedMixin):
+class CashFlow(UUIDMixin, DateStampedMixin):
     """Модель - Движение денежного средства (ДДС)."""
 
     status = models.ForeignKey(
@@ -194,6 +197,7 @@ class CashFlow(UUIDMixin, DatetimeStampedMixin):
         decimal_places=3,
         null=False,
         help_text="Кол-во денежных средств в рублях",
+        validators=[MinValueValidator(0)],
     )
     comment = models.CharField(
         max_length=512,
@@ -203,8 +207,8 @@ class CashFlow(UUIDMixin, DatetimeStampedMixin):
 
     class Meta:
         db_table = 'cash_manager"."cash_flow'
-        verbose_name = "Движение денежного средства"
-        verbose_name_plural = "Движения денежных средств"
+        verbose_name = "Движение денежного средства (ДДС)"
+        verbose_name_plural = "Движения денежных средств (ДДС)"
 
     def __str__(self) -> str:
         return f"CashFlowID={self.id}"

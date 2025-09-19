@@ -1,0 +1,14 @@
+{% load i18n %}
+<div>
+  <form method="get">
+    {% for k, v in request.GET.items %}
+      {% if k != spec.parameter_name %}
+        <input type="hidden" name="{{ k }}" value="{{ v }}">
+      {% endif %}
+    {% endfor %}
+
+    <label>{{ spec.title }}</label>
+    <input type="text" name="{{ spec.parameter_name }}" value="{{ spec.value|default_if_none:'' }}">
+    <button type="submit">{% trans "Применить" %}</button>
+  </form>
+</div>
