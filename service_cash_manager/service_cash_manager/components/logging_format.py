@@ -1,4 +1,9 @@
+import os
 import sys
+
+import dotenv
+
+dotenv.load_dotenv()
 
 
 LOGGING = {
@@ -25,7 +30,10 @@ LOGGING = {
         # Django
         "django": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": os.environ.get(
+                "CASH_MANAGER_SERVICE_DJANGO_LOG_LVL",
+                "DEBUG",
+            ),
             "propagate": True,
         },
     },

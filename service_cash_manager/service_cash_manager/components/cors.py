@@ -1,2 +1,15 @@
-CORS_ALLOW_ALL_ORIGINS = True  # TODO:
-CORS_ALLOW_CREDENTIALS = True
+import os
+
+import dotenv
+
+dotenv.load_dotenv()
+
+
+CORS_ALLOW_ALL_ORIGINS = os.environ.get(
+    "CASH_MANAGER_CORS_ALLOW_ALL_ORIGINS",
+    True,
+) == "True"
+CORS_ALLOW_CREDENTIALS = os.environ.get(
+    "CASH_MANAGER_CORS_ALLOW_CREDENTIALS",
+    True,
+) == "True"

@@ -14,14 +14,15 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
-RUN useradd -m -r django \
-    && mkdir -p /app/staticfiles /app/media \
+RUN useradd -m -r django
+
+RUN mkdir -p /app/static /app/media /app/staticfiles /app/templates \
     && chown -R django:django /app
 
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
-COPY ./service_cash_manager .
+COPY --chown=django:django ./service_cash_manager .
 
 USER django
 

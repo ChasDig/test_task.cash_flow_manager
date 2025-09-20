@@ -48,7 +48,7 @@ class CashFlowSubCategory(UUIDMixin):
         verbose_name_plural = "Подкатегории ДДС"
 
     def __str__(self) -> str:
-        return f"SubCategoryTitle={self.title}(Alias={self.alias})"
+        return f"{self.title}({self.alias})"
 
 
 class CashFlowCategory(UUIDMixin):
@@ -73,7 +73,7 @@ class CashFlowCategory(UUIDMixin):
         verbose_name_plural = "Категории ДДС"
 
     def __str__(self) -> str:
-        return f"CategoryTitle={self.title}(Alias={self.alias})"
+        return f"{self.title}({self.alias})"
 
 
 class CashFlowCategoryBySubcategory(UUIDMixin):
@@ -124,7 +124,7 @@ class CashFlowType(UUIDMixin):
         verbose_name_plural = "Типы ДДС"
 
     def __str__(self) -> str:
-        return f"TypeTitle={self.title}(Alias={self.alias})"
+        return f"{self.title}({self.alias})"
 
 
 class CashFlowCategoryByType(UUIDMixin):
@@ -175,7 +175,7 @@ class CashFlowStatus(UUIDMixin):
         verbose_name_plural = "Статусы ДДС"
 
     def __str__(self) -> str:
-        return f"Статус '{self.title}'('{self.alias}')"
+        return f"{self.title}({self.alias})"
 
 
 class CashFlow(UUIDMixin, DateStampedMixin):
@@ -211,4 +211,4 @@ class CashFlow(UUIDMixin, DateStampedMixin):
         verbose_name_plural = "Движения денежных средств (ДДС)"
 
     def __str__(self) -> str:
-        return f"CashFlowID={self.id}"
+        return self.id
