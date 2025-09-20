@@ -7,13 +7,20 @@
 * * *
 
 
+
 ## Оглавление:
 - [Требования](#требования)
 - [Архитектура сервиса](#архитектура-сервиса)
 - [Архитектура данных в Data Base](#архитектура-данных-в-data-base)
 - [Используемые технологии в проекте](#используемые-технологии-в-проекте)
+- [Запуск проекта (локально)](#запуск-проекта-локально)
+- [Запуск проекта (docker-compose)](#запуск-проекта-docker-compose)
+- [Сайт проекта](#сайт-проекта)
+- [Данные тестового пользователя](#данные-тестового-пользователя)
+- [Дальнейшие доработки](#дальнейшие-доработки-проекта)
 - [Соглашения разработки](#соглашения-разработки)
 - [Code Style](#code-style)
+
 
 
 ## Требования:
@@ -38,12 +45,15 @@
 - **Fault Tolerance**(отказоустойчивость системы):
 
 
+
 ## Архитектура сервиса:
 ![Service Architecture](./docs/service_arch.png)
 
 
+
 ## Архитектура данных в Data Base:
 ![Architecture_Data](./docs/service_arch_data.png)
+
 
 
 ## Используемые технологии в проекте:
@@ -51,6 +61,85 @@
 - Django v.5.2.5: https://docs.djangoproject.com/en/5.2/;
 - Uvicorn v. 0.35.0: https://www.uvicorn.org/;
 - Postgres v.17.5 (psycopg2-binary v.2.9.10): https://www.postgresql.org/;
+
+
+
+## Запуск проекта (локально):
+1. Создайте файл **.env** и скопируйте в него конфигурации из файла **.env_example**. Добавьте те конфигурации, 
+которые имеют **[Local]** (это необходимый минимум, остальные по необходимости). Обратите внимание на конфигурации при 
+поднятии доп. сервисов и запуске проекта (например, **POSTGRES_HOST**). 
+
+2. При необходимости, поднимите связанные сервисы в **docker-compose-local.yaml** (PostgreSQL):
+```sh
+docker compose -f ./docker-compose-local.yaml -f docker-compose.override.yaml up -d
+```
+
+3. Установите зависимости:
+```sh
+pip install -r requirements.txt
+```
+
+4. Примените миграции:
+```sh
+cd ./service_cash_manager
+python manage.py migrate
+```
+
+5. Подгрузите тестовые данные:
+```sh
+cd ./service_cash_manager
+python ./load_test_data/load_data.py
+```
+
+6. Загрузка static-files:
+```sh
+cd ./service_cash_manager
+python manage.py collectstatic --no-input
+```
+
+7. Запустите REST-API часть проект (требуется указать директорию **service_notification** как root):
+```sh
+cd ./service_cash_manager
+uvicorn service_cash_manager.asgi:application --host 127.0.0.1 --port 8000 --reload
+```
+
+8. Зайдите под тестовым пользователем, указанным ниже.
+
+
+
+## Запуск проекта (docker-compose):
+1. Создайте файл **.env** и скопируйте в него конфигурации из файла **.env_example**. Добавьте те конфигурации, 
+которые имеют **[Docker_Compose]** (это необходимый минимум, остальные по необходимости).
+
+2. Поднимите сервисы:
+```sh
+docker compose -f ./docker-compose.yaml up -d
+```
+
+3. Или, если требуется поднять сервисы с открытыми портами сервисов (**PostgreSQL**):
+```sh
+docker compose -f ./docker-compose.yaml -f docker-compose.override.yaml up -d
+```
+
+4. Зайдите под тестовым пользователем, указанным ниже.
+
+
+
+## Сайт проекта:
+- AdminPanel, авторизация (после запуска проекта): **http://127.0.0.1:8000/admin/login/?next=/admin/**
+
+
+
+## Данные тестового пользователя:
+| Username         | Password |
+|------------------|----------|
+| **admin**        | admin    |
+
+
+
+## Дальнейшие доработки проекта:
+- Добавление Web-Service (Nginx) для балансировки и раздачи статики;
+
 
 
 ## Соглашения разработки:
@@ -71,12 +160,7 @@
 - Ссылка на источник: https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
 
 
+
 ## Code Style:
 - **PEP8**(https://peps.python.org/pep-0008/);
 - Docstring-формат - **reStructuredText (reST)**;
-- Linters: **Flake8**(https://flake8.pycqa.org/en/latest/);
-- Pre-commits(https://pre-commit.com/):
-- - **black** - авто-форматирование кода;
-- - **flake8** - проверка стиля и ошибок;
-- - **mypy** - статическая типизация;
-- - **isort** - сортировка импортов;
