@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  service_cash_manager:
+    build: .
+    container_name: service_cash_manager
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - app_static_volume:/app/staticfiles
+      - app_media_volume:/app/media
+      - app_templates_volume:/app/templates
+    depends_on:
+      - pg_db
+    networks:
+      - sec_network
+
+  pg_db:
+    image: postgres:17.5
+    container_name: pg_db
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - pg_db_data:/var/lib/postgresql/data
+      - ./pg-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      start_period: 10s
+      interval: 3s
+      timeout: 3s
+      retries: 3
+    networks:
+      - sec_network
+
+volumes:
+  pg_db_data:
+  app_static_volume:
+  app_media_volume:
+  app_templates_volume:
+
+networks:
+  sec_network:
+    driver: bridge

@@ -1,0 +1,26 @@
+@startuml
+
+!define WEB_INTERFACE #FFA07A
+!define SERVER #FFD700
+!define SERVICE #98FB98
+!define STORAGE #87CEEB
+
+rectangle "Client" as client {
+  component "Web-Interface" as web_interface WEB_INTERFACE
+}
+
+rectangle "Backend" as backend {
+  component "Web_Server" as web_server SERVER
+  component "Cash_Flow_Manager_Service" as cash_flow_manager_service SERVICE
+
+  database "PostgreSQL_DB" as postgresql_db STORAGE
+}
+
+web_interface -> web_server
+web_server -> cash_flow_manager_service
+cash_flow_manager_service -> postgresql_db
+postgresql_db -> cash_flow_manager_service
+cash_flow_manager_service -> web_server
+web_server -> web_interface
+
+@enduml
